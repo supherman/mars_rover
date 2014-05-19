@@ -36,6 +36,15 @@ class Rover
     end
   end
 
+  def turn_right
+    case facing
+      when :north then @facing = :east
+      when :south then @facing = :west
+      when :east then @facing = :south
+      when :west then @facing = :north
+    end
+  end
+
 end
 
 describe Rover do
@@ -158,6 +167,7 @@ describe Rover do
       before do
         subject.facing = :east
       end
+
       specify do
         subject.turn_left
         expect(subject.facing).to eql :north
@@ -168,10 +178,58 @@ describe Rover do
       before do
         subject.facing = :west
       end
+
       specify do
         subject.turn_left
         expect(subject.facing).to eql :south
       end
     end
   end
+
+describe '#turn_right' do
+    context 'Facing north' do
+      before do
+        subject.facing = :north
+      end
+
+      specify do
+        subject.turn_right
+        expect(subject.facing).to eql :east
+      end
+    end
+
+    context 'Facing south' do
+      before do
+        subject.facing = :south
+      end
+
+      specify do
+        subject.turn_right
+        expect(subject.facing).to eql :west
+      end
+    end
+
+    context 'Facing east' do
+      before do
+        subject.facing = :east
+      end
+
+      specify do
+        subject.turn_right
+        expect(subject.facing).to eql :south
+      end
+    end
+
+    context 'Facing west' do
+      before do
+        subject.facing = :west
+      end
+
+      specify do
+        subject.turn_right
+        expect(subject.facing).to eql :north
+      end
+    end
+  end
+
 end
