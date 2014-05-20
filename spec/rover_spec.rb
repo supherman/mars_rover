@@ -1,51 +1,6 @@
 require 'spec_helper'
-
-class Rover
-  attr_accessor :facing
-
-  def initialize(grid, params)
-    @x = params[:x]
-    @y = params[:y]
-    @facing = params[:facing]
-    @grid = grid
-    @grid.set(@x, @y, self)
-  end
-
-  def move_forwards(quantity)
-    @y -= quantity if @facing == :south
-    @y += quantity if @facing == :north
-    @x += quantity if @facing == :east
-    @x -= quantity if @facing == :west
-    @grid.set(@x, @y, self)
-  end
-
-  def move_backwards(quantity)
-    @y += quantity if @facing == :south
-    @y -= quantity if @facing == :north
-    @x -= quantity if @facing == :east
-    @x += quantity if @facing == :west
-    @grid.set(@x, @y, self)
-  end
-
-  def turn_left
-    case facing
-      when :north then @facing = :west
-      when :south then @facing = :east
-      when :east then @facing = :north
-      when :west then @facing = :south
-    end
-  end
-
-  def turn_right
-    case facing
-      when :north then @facing = :east
-      when :south then @facing = :west
-      when :east then @facing = :south
-      when :west then @facing = :north
-    end
-  end
-
-end
+require 'rover'
+require 'grid'
 
 describe Rover do
   let(:grid) { Grid.new(100, 100) }
@@ -186,7 +141,7 @@ describe Rover do
     end
   end
 
-describe '#turn_right' do
+  describe '#turn_right' do
     context 'Facing north' do
       before do
         subject.facing = :north
@@ -232,4 +187,25 @@ describe '#turn_right' do
     end
   end
 
+  describe '#move' do
+    context 'When ffrff' do
+      before do
+        subject.move('ffrff')
+      end
+
+      specify do
+        expect(grid.get(2,2)).to eql subject
+      end
+    end
+
+    context 'When frffblrf' do
+      before do
+        subject.move('frffblrf')
+      end
+
+      specify do
+        expect(grid.get(2,1)).to eql subject
+      end
+    end
+  end
 end
